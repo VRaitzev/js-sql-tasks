@@ -7,8 +7,16 @@ const config = {
   port: 5432,
 };
 
-export default async (book) => {
-  // BEGIN (write your solution here)
+const sql = postgres(config);
 
-  // END
+export default async (book) => {
+  const { title, author } = book;
+
+  const res = await sql`
+    INSERT INTO books (title, author)
+    VALUES (${title}, ${author})
+    RETURNING id
+  `;
+
+  return res[0].id;
 };
